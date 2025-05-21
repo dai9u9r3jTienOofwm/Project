@@ -14,22 +14,21 @@ import com.badlogic.game.view.GameoverScreen;
 import com.badlogic.game.view.BulletTask;
 import com.badlogic.game.view.Constants;
 import com.badlogic.game.view.CollisionCheck;
+import com.badlogic.game.util.Constant;
 
 public class Player extends BaseEntity {
     private int health;
-    private float speed;
     private int powerLevel;
-    private Rectangle bounds;
+    private GeometryRec bounds;
     private Image image;
 
     public Player(float x, float y, float width, float height) {
         super(x, y, width, height);
         this.health = 5; // Default health
-        this.speed = 5.0f; // Default speed
+        this.speed = Constant.PLAYER_SPEED; // Default speed
         this.powerLeve = 1; // Default power level
-        this.bounds = new Rectangle(x, y, width, height);
-        this.texture = new Texture("player.png"); // Placeholder texture
-        image = new Image(batch, x, y, 0, 0, "player.png");
+        this.bounds = new GeometryRec(x, y, width, height);
+        image = new Image(x, y, 0, 0, "player.png");
     }
 
     public int getHealth() {
@@ -99,7 +98,7 @@ public class Player extends BaseEntity {
             }
         } 
         if (InputController.isFocus()) {
-            this.setSpeed(2.0f);
+            this.setSpeed(Constant.PLAYER_SPEED);
         }
         bounds.setPosition(position.x, position.y);
 
@@ -127,7 +126,7 @@ public class Player extends BaseEntity {
     @Override
     public void render(SpriteBatch batch) {
         // Render the player sprite
-        image.playerDraw();
+        image.playerDraw(batch);
     }    
 
     @Override

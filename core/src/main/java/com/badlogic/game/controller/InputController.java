@@ -10,6 +10,7 @@ public class InputController implements InputProcessor {
     private boolean rightPressed;
     private boolean zPressed;
     private boolean shiftPressed;
+    private boolean escPressed;
 
     public InputController() {
         upPressed = false;
@@ -18,6 +19,7 @@ public class InputController implements InputProcessor {
         rightPressed = false;
         zPressed = false;
         shiftPressed = false;
+        escPressed = false;
     }
     // To do
     // Implement the methods of InputProcessor to handle key events
@@ -44,6 +46,9 @@ public class InputController implements InputProcessor {
             case Input.Keys.SHIFT_RIGHT:
                 shiftPressed = true;
                 break;
+            case Input.Keys.ESCAPE:
+                escPressed = true;
+                break;    
         }
         return true;
     }
@@ -70,6 +75,10 @@ public class InputController implements InputProcessor {
     }
     public boolean isFocus() {
         return shiftPressed;
+    }
+
+    public boolean isEscPressed() {
+        return escPressed;
     }
 
     @Override

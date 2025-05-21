@@ -1,40 +1,43 @@
 package com.badlogic.game.view;
 
 public class Image {
-     private Texture spriteSheet;
-    private TextureRegion singleFrame;
-    private SpriteBatch batch;
-    private float x, y;
-
-    public class Image {
     private Texture spriteSheet;
     private TextureRegion singleFrame;
-    private SpriteBatch batch;
     private float x, y;
-    private int frameWidth = 64;   // Assume frame size defined
-    private int frameHeight = 64;  // Assume frame size defined
+    private int frameWidth = 64, frameHeight = 64;
 
-    // New constructor that accepts a texture path.
-    public Image(SpriteBatch batch, float x, float y, int selectRow, int selectCol, String texturePath) {
-        this.batch = batch;
+    public Image(float x, float y, int selectRow, int selectCol, String texturePath) {
         this.x = x;
         this.y = y;
-        // Loads the texture based on the passed texturePath
         spriteSheet = new Texture(Gdx.files.internal(texturePath));
 
         // Split the sprite sheet into frames.
         TextureRegion[][] tmp = TextureRegion.split(spriteSheet, frameWidth, frameHeight);
-        // Pick the desired frame.
         singleFrame = tmp[selectRow][selectCol];
     }
 
+    public float getFrameRow() {
+        return y / frameHeight;
+    }
+
+    public float getFrameCol() {
+        return x / frameWidth;
+    }
+
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
     // Player draw method as an example.
-    public void playerDraw() {
+    public void playerDraw(SpriteBatch batch) {
         batch.draw(singleFrame, x, y);
     }
     
     // Example enemyDraw() method.
-    public void enemyDraw(int selectRow, int selectCol, float enemyX, float enemyY) {
+    public void enemyDraw(int selectRow, int selectCol, float enemyX, float enemyY, SpriteBatch batch) {
         TextureRegion[][] tmp = TextureRegion.split(spriteSheet, frameWidth, frameHeight);
         TextureRegion enemyFrame = tmp[selectRow][selectCol];
         batch.draw(enemyFrame, enemyX, enemyY);
@@ -52,4 +55,4 @@ public class Image {
     }
 }
 
-}
+

@@ -82,6 +82,32 @@ public class GameScreen implements Screen {
 
     checkCollisions();
 }
+    public void checkCollisions() {
+        for (Bullet players: playerBullets) {
+            for(Enemy enemy: enemies) {
+                if (CollisionCheck.overlap(players.bounds, enemy.bounds)) {
+                    enemy.takeDamage(1);
+                    players.onDestroy();
+                }
+            }
+            if (CollisionCheck.overlap(players.bounds, boss.bounds)) {
+                boss.takeDamage(1);
+                players.onDestroy();
+            }    
+        }
+        for (Bullet enemis : enemyBullets) {
+            if (CollisionCheck.overlap(player.bounds, enemis.bounds)) {
+                player.takeDamage(1);
+                enemis.onDestroy();
+            }
+        }
+        for (Bullet bulletHell : bossBullets) {
+            if (CollisionCheck.overlap(player.bounds, bulletHell.bounds)) {
+                player.takeDamage(1);
+                bulletHell.onDestroy();
+            }
+        }
+    }
 
 
     public void removeEntity(BaseEntity entity) {
@@ -151,6 +177,13 @@ public class GameScreen implements Screen {
         boss.dispose();
     }
     }
+    private void checkGameState() {
+    }
+
+    private void cleanupBossBullets() {
+        bossBullets.clear();
+}
+
 
     
 }

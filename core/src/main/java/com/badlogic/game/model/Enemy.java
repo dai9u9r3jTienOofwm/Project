@@ -9,12 +9,13 @@ import com.badlogic.gdx.math.Rectangle;
 public class Enemy extends BaseEntity {
     private Vector2 position;
     private Rectangle patrolBounds;
-    private Texture texture;
+    private Image image;
     private boolean isActive;
     private Vector2 direction;
     private int health;
     private float speed;
 
+    // to do
     public Enemy(float x, float y, float width, float height, Vector2 direction) {
         
     }
@@ -22,49 +23,64 @@ public class Enemy extends BaseEntity {
     public Enemy(float x, float y, float width, float height) {
         super(x, y, width, height);
         this.position = new Vector2(x, y);
-        this.patrolBounds = new Rectangle(x, y, width, height);
-        this.texture = new Texture("enemy.png"); // Placeholder texture
+        this.direction = new Vector2(0, -1);
+        this.patrolBounds = new GeometryRec(x, y, width, height);
+        this.image = new Image(x, y, 0, 0, "enemy.png");
         this.isActive = true;
         this.health = 3; // Default health
-        this.speed = 2.0f; // Default speed
+        this.speed = Constant.ENEMY_SPEED; // Default speed
     }
 
-    public Vector2 getPosition() {
-        return position;
+    // to do
+    // Getters and Setters
+
+    public float getFrameRow() {
+        return image.getFrameRow();
     }
 
-    public void setPosition(float x, float y) {
-        this.position.set(x, y);
-        this.bounds.setPosition(x, y);
+    public float getFrameCol() {
+        return image.getFrameCol();
     }
 
-    public Rectangle getBounds() {
-        return bounds;
+    public float getX() {
+        return image.getX();
     }
 
-    public void setBounds(Rectangle bounds) {
-        this.bounds = bounds;
+    public float getY() {
+        return image.getY();
     }
-
-    public int getHealth() {
-        return health;
-    }    
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-    public int getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
-    }
-
+        //to do
+    // Move enemy in its current direction (direction x)
+    // Check if it is out of bounds (patrolBounds), flip directionx
     @Override 
     public void update(float deltaTime) {
-        position.x += direction.x * speed * deltaTime; 
+
+        if (Math.random() < 0.01) {
+            fireBullet();
+        }
+        patrolBounds.setPosition(position.x, position.y);
+        
+    }
+    // to do
+    @Override
+    public void render(SpriteBatch batch) {
+        image.enemyDraw(enemy.getFrameRow(), enemy.getFrameCol(), enemy.getX(), enemy.getY(), batch);
+    }
+
+    // to do
+    @Override
+    public boolean isAlive() {}
+
+    @Override
+    public void onDestroy() {
+        isActive = false;
+        // Remove from the game screen
+        GameScreen.removeEntity(this);
+
+    }
+
+    public void fireBullet() {
+        BulletTask.spamBullet(position, new Vector2(0, -1), 5f);
     }
 
 
