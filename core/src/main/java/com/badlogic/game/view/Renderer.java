@@ -50,6 +50,14 @@ public class Renderer {
         for (Bullet bullet : gameScreen.getEnemyBullets()) {
             bullet.render(batch);
         }
+
+        for (HealthItem item : gameScreen.getHealthItems()) {
+            item.render(batch);
+        }
+
+        for (PowerItem item : gameScreen.getPowerItems()) {
+            item.render(batch);
+        }
         
         // Render any additional entities (like bosses)
         if (gameScreen.getBoss() != null) {

@@ -50,6 +50,14 @@ public class Image {
         batch.draw(bulletFrame, bulletX, bulletY);
     }
 
+    public void hItemDraw(float itemX, float itemY, SpriteBatch batch) {
+        batch.draw(singleFrame, itemX, itemY);
+    }
+
+    public void pItemDraw(float itemX, float itemY, SpriteBatch batch) {
+        batch.draw(singleFrame, itemX, itemY);
+    }
+
     public void dispose() {
         spriteSheet.dispose();
     }

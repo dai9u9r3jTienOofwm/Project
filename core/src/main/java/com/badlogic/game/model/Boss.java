@@ -13,25 +13,19 @@ public class Boss extends BaseEntity {
     private BossBulletPattern pattern;
     private float stateTime;
     private boolean isAlive;
-    private Image image;
-    private GeometryRec bounds;
 
     public Boss(Vector2 position) {
-        super(position.x, position.y, 0, 0);
+        super(position.x, position.y, 0, 0, "boss.png");
         this.health = 100; // Default health
         this.currentPhrase = 1;
-        this.bounds = new GeometryRec(position.x, position.y, 0, 0);
-        this.image = new Image(batch, position.x, position.y, 0, 0, "boss.png");
         this.pattern = new BossBulletPattern(this);
         this.stateTime = 0;
     }
 
     public Boss(float x, float y, float width, float height, BossBulletPattern pattern) {
-        super(x, y, width, height);
+        super(x, y, width, height, "boss.png");
         this.health = 100; // Default health
         this.currentPhrase = 1;
-        this.bounds = new GeometryRec(x, y, width, height);
-        this.image = new Image(batch, x, y, 0, 0, "player.png");
         this.pattern = new BossBulletPattern(this);
         this.stateTime = 0;
     }
@@ -57,9 +51,15 @@ public class Boss extends BaseEntity {
          }
     }
 
+    
+    @Override
+    public GeometryRec getBounds() {
+        return super.getBounds();
+    }
+
     @Override
     public void render(SpriteBatch batch) {
-        image.enemyDraw(enemy.getFrameRow(), enemy.getFrameCol(), enemy.getX(), enemy.getY(), batch);
+        image.bossDraw(boss.getWidth(), boss.getHeight(), boss.getX(), boss.getY(), batch);
     }
 
     @Override 
@@ -80,5 +80,7 @@ public class Boss extends BaseEntity {
     public void onDestroy() {
         isAlive = false;
         GameScreen.removeEntity(this);
+        Main.getInstance().setScreen(new GameoverScreen());
+        System.out.println("End stage.");
     }
 }

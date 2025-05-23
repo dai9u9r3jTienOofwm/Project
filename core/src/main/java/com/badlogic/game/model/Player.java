@@ -3,8 +3,7 @@ package com.badlogic.game.model;
 import com.badlogic.gdx.Math.Vector2;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.GeometryBase;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.game.collision.GeometryRec;
 import com.badlogic.gdx.graphic.Texture;
 import com.badlogic.gdx.util.MathUtils;
 import com.badlogic.game.controller.InputController;
@@ -20,16 +19,14 @@ public class Player extends BaseEntity {
     private int health;
     private int powerLevel;
     private GeometryRec bounds;
-    private Image image;
     private BulletType type;
 
     public Player(float x, float y, float width, float height) {
-        super(x, y, width, height);
+        super(x, y, width, height, "player.png");
         this.health = 5; // Default health
         this.speed = Constant.PLAYER_SPEED; // Default speed
         this.powerLeve = 1; // Default power level
         this.bounds = new GeometryRec(x, y, width, height);
-        image = new Image(x, y, 0, 0, "player.png");
         this.type = BulletType.PLAYER_BULLET;
     }
 
@@ -55,14 +52,6 @@ public class Player extends BaseEntity {
 
     public void setPowerLevel(int powerLevel) {
         this.powerLevel = powerLevel;
-    }
-
-    public Vector2 getPosition() {
-        return position;
-    }
-
-    public Image getImage() {
-        return image;
     }
 
     /**
@@ -104,6 +93,10 @@ public class Player extends BaseEntity {
         }
         bounds.setPosition(position.x, position.y);
 
+        if (!isAlive()) {
+            onDestroy();
+        }
+
     }
 
     public void powerUp() {
@@ -112,6 +105,10 @@ public class Player extends BaseEntity {
 
     public void takeDamage(int damage) {
         health -= damage;
+    }
+
+    public void getHeal() {
+        health += 1;
     }
 
     @Override
@@ -138,7 +135,7 @@ public class Player extends BaseEntity {
 
     public void fireBullet(boolean isFocus) {
         if (isFocus) {
-            BulletTask.spamBullet(position, new Vector2(0, 1), powerLevel * 1.5f, type);
+            BulletTask.spamBullet(position, new Vector2(0, 1), powerLevel * 2, type);
         } else {
             BulletTask.spamBullet(position, new Vector2(0, 1), powerLevel, type);
             BulletTask.spamBullet(position, new Vector2(-0,3f, 1), powerLevel, type);

@@ -12,11 +12,13 @@ public abstract class BaseEntity {
     private Vector2 position;
     private Vector2 size;
     private GeometryBase bounds;
-    private Texture texture;
+    private Image image;
 
-    public BaseEntity(float x, float y, float width, float height) {
+    public BaseEntity(float x, float y, float width, float height, String texturePath) {
         this.position = new Vector2(x, y);
         this.size = new Vector2(width, height);
+        this.bounds = new GeometryRec(x, y, width, height);
+        this.image = new Image(x, y, width, height, texturePath);
     }
 
     public Vector2 getPosition() {
@@ -46,12 +48,8 @@ public abstract class BaseEntity {
         this.bounds = bounds;
     }
 
-    public Texture getTexture() {
-        return texture;
-    }
-
-    public void setTexture(Texture texture) {
-        this.texture = texture;
+    public Image getImage() {
+        return image;
     }
 
     public abstract void update(float deltaTime);

@@ -21,6 +21,8 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private ArrayList<Enemy> enemies;
     private ArrayList<Bullet> playerBullets, enemyBullets, bossBullets;
+    private ArrayList<HealthItem> HealthItems;
+    private ArrayList<PowerItem> PowerItems;
     private Boss boss;
     private HUD hud;
     private float bossSpawnTimer = 0f;
@@ -36,6 +38,8 @@ public class GameScreen implements Screen {
         playerBullets = new ArrayList<>();
         enemyBullets = new ArrayList<>();
         bossBullets = new ArrayList<>();
+        HealthItems = new ArrayList<>();
+        PowerItems = new ArrayList<>();
 
         hud = new HUD(batch); // Initialize HUD
         Gdx.input.setInputProcessor(this);
@@ -47,6 +51,8 @@ public class GameScreen implements Screen {
         for (Bullet bullet : playerBullets) bullet.update(delta);
         for (Bullet bullet : enemyBullets) bullet.update(delta);
         for (Bullet bullet : bossBullets) bullet.update(delta);
+        for (HealthItem item : HealthItems) item.update(delta);
+        for (PowerItem item : PowerItems) item.update(delta);
 
         // Boss spawning logic
         if (GameUtil.shouldSpawnBoss(enemies, bossSpawnTimer, isSpawningBoss)) {
@@ -78,6 +84,8 @@ public class GameScreen implements Screen {
         for (Bullet bullet : playerBullets) bullet.render(batch);
         for (Bullet bullet : enemyBullets) bullet.render(batch);
         for (Bullet bullet : bossBullets) bullet.render(batch);
+        for (HealthItem item : HealthItems) item.render(batch);
+        for (PowerItem item : PowerItems) item.render(batch);
         if (boss != null) boss.render(batch);
         hud.render(); // Draw HUD on top
         batch.end();
