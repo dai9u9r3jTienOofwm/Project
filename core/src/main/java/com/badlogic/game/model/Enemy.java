@@ -1,75 +1,93 @@
 package com.badlogic.game.model;
 
+import com.badlogic.game.collision.GeometryRec;
+import com.badlogic.game.util.Constant;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.graphics.Texture;   
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 
 public class Enemy extends BaseEntity {
     private Vector2 position;
-    private Rectangle patrolBounds;
-    private Image image;
     private boolean isActive;
     private Vector2 direction;
-    private int health;
-    private float speed;
+    private int health = 3;
+    private float speed = Constant.ENEMY_SPEED;
 
     // to do
     public Enemy(float x, float y, float width, float height, Vector2 direction) {
-        
+        super(new Texture("enemy.png"), x, y);
+        this.direction = direction;
+        this.alive = true;
     }
 
     public Enemy(float x, float y, float width, float height) {
-        super(x, y, width, height);
-        this.position = new Vector2(x, y);
+        super(new Texture("enemy.png"), x, y);
         this.direction = new Vector2(0, -1);
-        this.patrolBounds = new GeometryRec(x, y, width, height);
-        this.image = new Image(x, y, 0, 0, "enemy.png");
-        this.isActive = true;
-        this.health = 3; // Default health
-        this.speed = Constant.ENEMY_SPEED; // Default speed
+        this.alive = true;
     }
 
     // to do
     // Getters and Setters
 
-    public float getFrameRow() {
-        return image.getFrameRow();
+
+    @Override
+    public float getHeight() {
+        return super.getHeight();
     }
 
-    public float getFrameCol() {
-        return image.getFrameCol();
+    @Override
+    public float getWidth() {
+        return super.getWidth();
     }
 
+    @Override
     public float getX() {
-        return image.getX();
+        return super.getX();
     }
 
+    @Override
     public float getY() {
-        return image.getY();
+        return super.getY();
     }
-        //to do
+
+    @Override
+    public GeometryRec getBounds() {
+        return super.getBounds();
+    }
+
+    //to do
     // Move enemy in its current direction (direction x)
     // Check if it is out of bounds (patrolBounds), flip directionx
-    @Override 
+    @Override
     public void update(float deltaTime) {
 
         if (Math.random() < 0.01) {
             fireBullet();
         }
-        patrolBounds.setPosition(position.x, position.y);
-        
+        super.setX(super.getX() + direction.x * speed * deltaTime);
+        super.setY(super.getY() + direction.y * speed * deltaTime);
+
     }
     // to do
     @Override
     public void render(SpriteBatch batch) {
-        image.enemyDraw(enemy.getFrameRow(), enemy.getFrameCol(), enemy.getX(), enemy.getY(), batch);
+        batch.draw(texture, x, y);
     }
 
     // to do
     @Override
-    public boolean isAlive() {}
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if(health <= 0) {
+            this.alive = false;
+        }
+    }
 
     @Override
     public void onDestroy() {
@@ -80,7 +98,7 @@ public class Enemy extends BaseEntity {
     }
 
     public void fireBullet() {
-        BulletTask.spamBullet(new Vector2(position.x, position.y), direction, 5, BulletType.ENEMY_BULLET);
+        BulletTask.spamBullet(position, new Vector2(0, -1), 5f);
     }
 
 

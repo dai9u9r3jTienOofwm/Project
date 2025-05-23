@@ -1,84 +1,77 @@
 package com.badlogic.game.model;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.game.task.BulletTask;
-import com.badlogic.game.view.Image;
-import com.badlogic.game.view.GameScreen;
 import com.badlogic.game.collision.GeometryRec;
-import com.badlogic.game.view.BossBulletPattern;
+import com.badlogic.game.util.Constant;
+import com.badlogic.game.view.Image;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class Boss extends BaseEntity {
-    private int health;
+    private int health = 100;
     private int currentPhrase;
-    private BossBulletPattern pattern;
+    private BossBulletPattern bulletPattern;
     private float stateTime;
-    private boolean isAlive;
-    private Image image;
-    private GeometryRec bounds;
+    private Vector2 velocity = new Vector2(10f, 10f);
 
-    public Boss(Vector2 position) {
-        super(position.x, position.y, 0, 0);
-        this.health = 100; // Default health
-        this.currentPhrase = 1;
-        this.bounds = new GeometryRec(position.x, position.y, 0, 0);
-        this.image = new Image(batch, position.x, position.y, 0, 0, "boss.png");
-        this.pattern = new BossBulletPattern(this);
-        this.stateTime = 0;
-    }
-
-    public Boss(float x, float y, float width, float height, BossBulletPattern pattern) {
-        super(x, y, width, height);
-        this.health = 100; // Default health
+    public Boss(float x, float y, BossBulletPattern pattern) {
+        super(new Texture("boss.png"), x, y);
         this.currentPhrase = 1;
         this.bounds = new GeometryRec(x, y, width, height);
-        this.image = new Image(batch, x, y, 0, 0, "player.png");
-        this.pattern = new BossBulletPattern(this);
+        this.bulletPattern = pattern;
         this.stateTime = 0;
     }
 
     @Override
     public void update(float deltaTime) {
-        stateTime += delta;
-        position.add(velocity.x * deltaTime, velocity.y * deltaTime);
-        if (position.x < 0 || position.x > Constants.SCREEN_WIDTH - width) {
+        stateTime += deltaTime;
+        setX(this.x + velocity.x * deltaTime);
+        setY(this.y + velocity.y * deltaTime);
+        if (x < 0 || x > Constant.SCREEN_WIDTH - width) {
             velocity.x = -velocity.x;
         }
-         if ((health <= 55 || stateTime >= 60 ) && currentPhrase == 1 ) {
+
+        if ((health <= 55 || stateTime >= 60 ) && currentPhrase == 1 ) {
             transitionToSpellCard1();
-         }
+        }
 
-         if ((health <= 5 || stateTime >= 120 )&& currentPhrase == 2) {
+        if ((health <= 5 || stateTime >= 120 ) && currentPhrase == 2) {
             health = 100;
-            transitionTOSpellCard2();
-         }
+            transitionToSpellCard2();
+        }
 
-         if (!isAlive) {
+        if (!alive) {
             onDestroy();
-         }
+        }
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        image.enemyDraw(enemy.getFrameRow(), enemy.getFrameCol(), enemy.getX(), enemy.getY(), batch);
+        batch.draw(texture, x, y);
     }
 
-    @Override 
+    @Override
+    public GeometryRec getBounds() {
+        return super.getBounds();
+    }
+
+    @Override
     public boolean isAlive() {
         return health <= 0;
     }
 
     private void transitionToSpellCard1() {
         currentPhrase = 2;
-        BulletTask.changeCard(BossBulletPattern.PHRASE_TWO);
+        bulletPattern.changeCard(BossBulletPattern.PHRASE_TWO);
     }
-    private void transtitionToSpellCard2() {
+    private void transitionToSpellCard2() {
         currentPhrase = 3;
-        bulletTask.changeCard(BossBulletPattern.PHRASE_THREE);
+        bulletPattern.changeCard(BossBulletPattern.PHRASE_THREE);
     }
 
     @Override
     public void onDestroy() {
-        isAlive = false;
+        alive = false;
         GameScreen.removeEntity(this);
     }
 }

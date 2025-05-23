@@ -1,49 +1,71 @@
 package com.badlogic.game.model;
 
-import com.badlogic.gdx.Math.Vector2;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.GeometryBase;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.game.collision.GeometryRec;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 
 public abstract class BaseEntity {
-    private Vector2 position;
-    private Vector2 size;
-    private GeometryBase bounds;
-    private Texture texture;
+    protected float x;
+    protected float y;
+    protected float width;
+    protected float height;
+    protected GeometryRec bounds;
+    protected Texture texture;
+    protected boolean alive = true;
 
-    public BaseEntity(float x, float y, float width, float height) {
-        this.position = new Vector2(x, y);
-        this.size = new Vector2(width, height);
+    public BaseEntity(Texture texture, float x, float y) {
+        this.texture = texture;
+        this.x = x;
+        this.y = y;
+        this.width = texture.getWidth();
+        this.height = texture.getHeight();
+        this.bounds = new GeometryRec(x, y, width, height);
     }
 
-    public Vector2 getPosition() {
-        return position;
+    public float getX() {
+        return x;
     }
 
-    public void setPosition(float x, float y) {
-        this.position.set(x, y);
+    public float getY() {
+        return y;
     }
 
-    public Vector2 getSize() {
-        return size;
+    public void setX(float x) {
+        this.x = x;
+        bounds.setX(x);
     }
 
-    public void setSize(float width, float height) {
-        this.size.set(width, height);
+    public void setY(float y) {
+        this.y = y;
+        bounds.setY(y);
     }
 
-    public GeometryBase getBounds() {
+
+    public float getHeight() {
+        return height;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+        bounds.setWidth(width);
+    }
+
+    public void setHeight(float height) {
+        this.height = height;
+        bounds.setHeight(height);
+    }
+
+    public GeometryRec getBounds() {
         if (bounds == null) {
-            bounds = new Rectangle(position.x, position.y, size.x, size.y);
+            bounds = new GeometryRec(x, y, width, height);
         }
         return bounds;
-    }
-
-    public void setBounds(GeometryBase bounds) {
-        this.bounds = bounds;
     }
 
     public Texture getTexture() {
@@ -54,17 +76,24 @@ public abstract class BaseEntity {
         this.texture = texture;
     }
 
+    public boolean getAlive() {
+        return alive;
+    }
+
+    public void setAlive(boolean alive) {
+        this.alive = alive;
+    }
+
     public abstract void update(float deltaTime);
 
-    public void render(SpriteBatch batch) {
-        // Override in subclasses to render the entity
-    }
+    public abstract void render(SpriteBatch batch);
+    // Override in subclasses to render the entity
 
     public abstract boolean isAlive();
 
     public void onDestroy() {
         // Override in subclasses to handle destruction
-    }   
+    }
 
     public void dispose() {
         if (texture != null) {
