@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
 
         if (boss != null) boss.update(delta);
 
-        GameUtil.checkCollisions(player, enemies, playerBullets, enemyBullets, bossBullets, boss);
+        GameUtil.checkCollisions(player, enemies, playerBullets, enemyBullets, bossBullets, boss, HealthItems, PowerItems);
 
         hud.update(delta); // Update HUD display
     }

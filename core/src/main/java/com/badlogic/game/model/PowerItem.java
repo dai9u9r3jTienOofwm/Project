@@ -3,19 +3,19 @@ package com.badlogic.game.model;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class PowerItem extends BaseEntity {
-    private float speed = 200f;
+public class HealthItem extends BaseEntity{
+    private float speed = 100f;
     public int powerBuff;
+    private boolean alive = true;
 
-    public PowerItem(float x, float y) {
-        super(new Texture("PowerItem.png"), x, y);
+    public HealthItem(float x, float y, float width, float height) {
+        super(x, y, width, height, "PowerItem.png");
         this.powerBuff = 1;
-
     }
 
-    public PowerItem(float x, float y, int powerBuff) {
-        super(new Texture("PowerItem.png"), x, y);
-        this.powerBuff = powerBuff;
+    public HealthItem(float x, float y, float width, float height, int powerBuff) {
+        super(x, y, width, height, "PowerItem.png");
+        this.powerBuff = 1;
 
     }
 
@@ -30,19 +30,22 @@ public class PowerItem extends BaseEntity {
     public void setPowerBuff(int powerBuff) {
         this.powerBuff = powerBuff;
     }
-
     public int getPowerBuff() {
         return powerBuff;
     }
 
     @Override
     public void update(float deltaTime) {
-        y -= speed * deltaTime;
+        position.y -= speed * deltaTime;
+        if (position.y < 0) {
+            alive = false;
+        }
+
     }
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y);
+        this.getImage().pItemDraw(this.getWidth(), this.getHeight(), this.getX(), this.getY(), batch);
     }
 
     @Override
@@ -55,4 +58,3 @@ public class PowerItem extends BaseEntity {
         super.setAlive(alive);
     }
 }
-
