@@ -80,7 +80,7 @@ public class Enemy extends BaseEntity {
     }
 
     public void fireBullet() {
-        BulletTask.spamBullet(position, new Vector2(0, -1), 5f);
+        BulletTask.spamBullet(new Vector2(position.x, position.y), direction, 5, BulletType.ENEMY_BULLET);
     }
 
 

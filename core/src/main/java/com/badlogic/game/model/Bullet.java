@@ -7,51 +7,57 @@ public class Bullet extends BaseEntity {
     private GeometryRec bounds;
     private boolean isAlive;
     private BulletType bulletType;
+    private Image image;
 
     //to do 
     //contructor (damage = 1, isAlive = true)
 
+    /**
+     * Constructs a new Bullet instance with the specified position, velocity, speed, and type.
+     *
+     * @param x          The initial x-coordinate of the bullet.
+     * @param y          The initial y-coordinate of the bullet.
+     * @param xSpeed     The horizontal component of the bullet's velocity.
+     * @param ySpeed     The vertical component of the bullet's velocity.
+     * @param bulletType The type of the bullet.
+     */
+    public Bullet(float x, float y, float xSpeed, float ySpeed, int speed, BulletType bulletType) {
+        super(x, y, 0, 0);
+        this.position = new Vector2(x, y);
+        this.velocity = new Vector2(xSpeed, ySpeed);
+        this.damage = 1; // Default damage
+        this.isAlive = true;
+        this.bounds = new GeometryRec(x, y, 10, 10); // Default bounds
+        this.bulletType = bulletType;
+        this.speed = speed;
+    }
 
 
     //to do
     // getter/setter
 
 
+    public void getBulletType() {
+        return bulletType;
+    }
+
     @Override
     public void update(float deltaTime) {
-        position.x = velocity.x * deltaTime * Constant.BULLET_SPEED;
-        position.y = velocity.y * deltaTime * Constant.BULLET_SPEED;
+        position.add(velocity.x * delta, velocity.y * delta);
 
-        bounds.setPosition(position.x, position.y);
-        if (isOffScreen) {
+        if (isOffScreen()) {
             isAlive = false;
         }
-
-        if (bulletType == PLAYER_BULLET) {
-            // Check collision with enemies
-            for (Enemy enemy : enemies) {
-                if (CollisionCheck.checkCollision(bounds, enemy.getBounds())) {
-                    enemy.takeDamage(damage);
-                    onDestroy();
-                }
-            }
-        } else if (bulletType == ENEMY_BULLET || bulletType == BOSS_BULLET) {
-            // Check collision with player
-            if (CollisionCheck.checkCollision(bounds, player.getBounds())) {
-                player.takeDamage(damage);
-                onDestroy();
-            }
-        }
     }
+
     @Override
     public void render(SpriteBatch batch) {
         if (isAlive) {
-            batch.draw(texture, position.x, position.y, bounds.width, bounds.height);
+             bullet.getImage().bulletDraw(bullet.getFrameRow(), bullet.getFrameCol(), bullet.getX(), bullet.getY());
         }
     }
 
-    @Override
-    public boolean isOffScreen() {
+    private boolean isOffScreen() {
         return position.y < 0 || position.y > Constants.SCREEN_HEIGHT;
     }
     @Override
@@ -59,23 +65,8 @@ public class Bullet extends BaseEntity {
         isAlive = false;
         GameScreen.removeEntity(this);
     }
-    public void checkCollision() {
-        if (bulletType == PLAYER_BULLET) {
-            // Check collision with enemies
-            for (Enemy enemy : enemies) {
-                if (CollisionCheck.checkCollision(bounds, enemy.getBounds())) {
-                    enemy.takeDamage(damage);
-                    onDestroy();
-                }
-            }
-        } else if (bulletType == ENEMY_BULLET || bulletType == BOSS_BULLET) {
-            // Check collision with player
-            if (CollisionCheck.checkCollision(bounds, player.getBounds())) {
-                player.takeDamage(damage);
-                onDestroy();
-            }
-        }
-    }
+    
+    
 
     @Override
     public void dispose() {

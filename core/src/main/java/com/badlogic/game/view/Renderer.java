@@ -32,28 +32,28 @@ public class Renderer {
         
         // Render player using its Image instance.
         // Assume the player has an associated Image object.
-        gameScreen.getPlayer().getImage().playerDraw();
+        gameScreen.getPlayer().render(batch);
         
         // Render enemies.
         for (Enemy enemy : gameScreen.getEnemies()) {
             // Assume enemy stores its own x, y and frame selection info.
             // For example, enemy.getImage().enemyDraw(row, col, enemy.getX(), enemy.getY());
-            enemy.getImage().enemyDraw(enemy.getFrameRow(), enemy.getFrameCol(), enemy.getX(), enemy.getY());
+            enemy.render(batch);
         }
         
         // Render player bullets.
         for (Bullet bullet : gameScreen.getPlayerBullets()) {
-            bullet.getImage().bulletDraw(bullet.getFrameRow(), bullet.getFrameCol(), bullet.getX(), bullet.getY());
+           bullet.render(batch);
         }
         
         // Render enemy boss's bullets.
         for (Bullet bullet : gameScreen.getEnemyBullets()) {
-            bullet.getImage().bulletDraw(bullet.getFrameRow(), bullet.getFrameCol(), bullet.getX(), bullet.getY());
+            bullet.render(batch);
         }
         
         // Render any additional entities (like bosses)
         if (gameScreen.getBoss() != null) {
-            gameScreen.getBoss().getImage().playerDraw(); // or use a dedicated bossDraw() method
+            gameScreen.getBoss().render(batch); // or use a dedicated bossDraw() method
         }
         
         batch.end();

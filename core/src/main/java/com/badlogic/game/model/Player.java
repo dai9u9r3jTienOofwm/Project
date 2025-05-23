@@ -21,6 +21,7 @@ public class Player extends BaseEntity {
     private int powerLevel;
     private GeometryRec bounds;
     private Image image;
+    private BulletType type;
 
     public Player(float x, float y, float width, float height) {
         super(x, y, width, height);
@@ -29,6 +30,7 @@ public class Player extends BaseEntity {
         this.powerLeve = 1; // Default power level
         this.bounds = new GeometryRec(x, y, width, height);
         image = new Image(x, y, 0, 0, "player.png");
+        this.type = BulletType.PLAYER_BULLET;
     }
 
     public int getHealth() {
@@ -136,11 +138,11 @@ public class Player extends BaseEntity {
 
     public void fireBullet(boolean isFocus) {
         if (isFocus) {
-            BulletTask.spamBullet(position, new Vector2(0, 1), powerLevel * 1.5f);
+            BulletTask.spamBullet(position, new Vector2(0, 1), powerLevel * 1.5f, type);
         } else {
-            BulletTask.spamBullet(position, new Vector2(0, 1), powerLevel);
-            BulletTask.spamBullet(position, new Vector2(-0,3f, 1), powerLevel);
-            BulletTask.spamBullert(position, new Vector2(0.3f, 1), powerLevel);
+            BulletTask.spamBullet(position, new Vector2(0, 1), powerLevel, type);
+            BulletTask.spamBullet(position, new Vector2(-0,3f, 1), powerLevel, type);
+            BulletTask.spamBullert(position, new Vector2(0.3f, 1), powerLevel, type);
         }
     }
 
