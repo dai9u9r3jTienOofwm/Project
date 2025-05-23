@@ -13,6 +13,7 @@ public class Boss extends BaseEntity {
     private BossBulletPattern bulletPattern;
     private float stateTime;
     private Vector2 velocity = new Vector2(10f, 10f);
+    private int powerLever = 1;
 
     public Boss(float x, float y, BossBulletPattern pattern) {
         super(new Texture("boss.png"), x, y);
@@ -20,6 +21,22 @@ public class Boss extends BaseEntity {
         this.bounds = new GeometryRec(x, y, width, height);
         this.bulletPattern = pattern;
         this.stateTime = 0;
+    }
+
+    public void takeDamage(int damage) {
+        this.health -= damage;
+        if(health <= 0) {
+            this.alive = false;
+            onDestroy();
+        }
+    }
+
+    public int getPowerLever() {
+        return powerLever;
+    }
+
+    public void setPowerLever(int powerLever) {
+        this.powerLever = powerLever;
     }
 
     @Override
@@ -37,6 +54,7 @@ public class Boss extends BaseEntity {
 
         if ((health <= 5 || stateTime >= 120 ) && currentPhrase == 2) {
             health = 100;
+            this.powerLever = 2;
             transitionToSpellCard2();
         }
 

@@ -56,22 +56,6 @@ public class Bullet extends BaseEntity {
         if (isOffScreen()) {
             alive = false;
         }
-
-        if (bulletType == PLAYER_BULLET) {
-            // Check collision with enemies
-            for (Enemy enemy : enemies) {
-                if ((new CollisionCheck(bounds, enemy.getBounds())).checkCollision()) {
-                    enemy.takeDamage(damage);
-                    onDestroy();
-                }
-            }
-        } else if (bulletType == ENEMY_BULLET || bulletType == BOSS_BULLET) {
-            // Check collision with player
-            if ((new CollisionCheck(bounds, player.getBounds())).checkCollision()) {
-                player.takeDamage(damage);
-                onDestroy();
-            }
-        }
     }
     @Override
     public void render(SpriteBatch batch) {
@@ -87,23 +71,6 @@ public class Bullet extends BaseEntity {
     public void onDestroy() {
         alive = false;
         GameScreen.removeEntity(this);
-    }
-    public void checkCollision() {
-        if (bulletType == PLAYER_BULLET) {
-            // Check collision with enemies
-            for (Enemy enemy : enemies) {
-                if ((new CollisionCheck(bounds, enemy.getBounds())).checkCollision()) {
-                    enemy.takeDamage(damage);
-                    onDestroy();
-                }
-            }
-        } else if (bulletType == ENEMY_BULLET || bulletType == BOSS_BULLET) {
-            // Check collision with player
-            if ((new CollisionCheck(bounds, player.getBounds())).checkCollision()) {
-                player.takeDamage(damage);
-                onDestroy();
-            }
-        }
     }
 
     @Override

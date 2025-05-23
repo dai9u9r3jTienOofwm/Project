@@ -1,6 +1,7 @@
 package com.badlogic.game.model;
 
 import com.badlogic.game.collision.GeometryRec;
+import com.badlogic.game.task.BulletTask;
 import com.badlogic.game.util.Constant;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.graphics.Texture;
@@ -86,6 +87,7 @@ public class Enemy extends BaseEntity {
         this.health -= damage;
         if(health <= 0) {
             this.alive = false;
+            onDestroy();
         }
     }
 
@@ -98,7 +100,7 @@ public class Enemy extends BaseEntity {
     }
 
     public void fireBullet() {
-        BulletTask.spamBullet(position, new Vector2(0, -1), 5f);
+        BulletTask.spamBullet(x, y, new Vector2(0, -1), 5f);
     }
 
 

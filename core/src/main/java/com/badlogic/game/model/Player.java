@@ -1,6 +1,7 @@
 package com.badlogic.game.model;
 
 import com.badlogic.game.collision.GeometryRec;
+import com.badlogic.game.task.BulletTask;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +17,7 @@ public class Player extends BaseEntity {
     private int health = 5;;
     private int powerLevel = 1;
     private float speed = Constant.PLAYER_SPEED;
+    InputController inputController = new InputController();
 
     public Player(float x, float y) {
         super(new Texture("player.png"), x, y);
@@ -64,32 +66,32 @@ public class Player extends BaseEntity {
     public void update(float deltaTime) {
         // Update player position based on input and speed (
         // Up, Down, Left, Right)
-        if (InputController.isPressedUp()) {
+        if (inputController.isPressedUp()) {
             setY(getY() + speed * deltaTime);
         }
-        if (InputController.isPressedDown()) {
+        if (inputController.isPressedDown()) {
             setY(getY() - speed * deltaTime);
         }
 
-        if (InputController.isPressedLeft()) {
+        if (inputController.isPressedLeft()) {
             setX(getX() - speed * deltaTime);
         }
 
-        if (InputController.isPressedRight()) {
+        if (inputController.isPressedRight()) {
             setX(getX() + speed * deltaTime);
         }
 
         setX(MathUtils.clamp(getX(), 0, Constant.SCREEN_WIDTH - super.getWidth()));
         setY(MathUtils.clamp(getY(), 0, Constant.SCREEN_HEIGHT - super.getHeight()));
 
-        if (InputController.isShooting()) {
-            if (InputController.isFocus()) {
+        if (inputController.isShooting()) {
+            if (inputController.isFocus()) {
                 fireBullet(true);
             } else {
                 fireBullet(false);
             }
         }
-        if (InputController.isFocus()) {
+        if (inputController.isFocus()) {
             this.setSpeed(Constant.PLAYER_SPEED);
         }
 
@@ -136,7 +138,7 @@ public class Player extends BaseEntity {
         } else {
             BulletTask.spamBullet(x, y, new Vector2(0, 1), powerLevel);
             BulletTask.spamBullet(x, y, new Vector2(-0,3f, 1), powerLevel);
-            BulletTask.spamBullert(x, y, new Vector2(0.3f, 1), powerLevel);
+            BulletTask.spamBullet(x, y, new Vector2(0.3f, 1), powerLevel);
         }
     }
 
