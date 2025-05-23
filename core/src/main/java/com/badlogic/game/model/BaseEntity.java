@@ -3,8 +3,7 @@ package com.badlogic.game.model;
 import com.badlogic.gdx.Math.Vector2;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.GeometryBase;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.collision.GeometryBase;
 import com.badlogic.gdx.graphics.Texture;
 
 
@@ -18,7 +17,7 @@ public abstract class BaseEntity {
         this.position = new Vector2(x, y);
         this.size = new Vector2(width, height);
         this.bounds = new GeometryRec(x, y, width, height);
-        this.image = new Image(x, y, width, height, texturePath);
+        this.image = new Image(x, y, 0, 0, texturePath);
     }
 
     public Vector2 getPosition() {
@@ -37,9 +36,25 @@ public abstract class BaseEntity {
         this.size.set(width, height);
     }
 
+    public float getWidth() {
+        return size.x;
+    }
+
+    public float getHeight() {
+        return size.y;
+    }
+
+    public float getX() {
+        return position.x;
+    }
+
+    public float getY() {
+        return position.y;
+    }   
+
     public GeometryBase getBounds() {
         if (bounds == null) {
-            bounds = new Rectangle(position.x, position.y, size.x, size.y);
+            bounds = new GeometryRec(position.x, position.y, size.x, size.y);
         }
         return bounds;
     }
@@ -54,9 +69,7 @@ public abstract class BaseEntity {
 
     public abstract void update(float deltaTime);
 
-    public void render(SpriteBatch batch) {
-        // Override in subclasses to render the entity
-    }
+    public abstract void render(SpriteBatch batch);
 
     public abstract boolean isAlive();
 

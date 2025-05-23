@@ -5,6 +5,7 @@ import com.badlogic.game.task.BulletTask;
 import com.badlogic.game.view.Image;
 import com.badlogic.game.view.GameScreen;
 import com.badlogic.game.collision.GeometryRec;
+import com.badlogic.game.util.Constants;
 import com.badlogic.game.view.BossBulletPattern;
 
 public class Boss extends BaseEntity {
@@ -12,10 +13,9 @@ public class Boss extends BaseEntity {
     private int currentPhrase;
     private BossBulletPattern pattern;
     private float stateTime;
-    private boolean isAlive;
 
-    public Boss(Vector2 position) {
-        super(position.x, position.y, 0, 0, "boss.png");
+    public Boss(float x, float y, float width, float height) {
+        super(x, y, width, height, "boss.png");
         this.health = 100; // Default health
         this.currentPhrase = 1;
         this.pattern = new BossBulletPattern(this);
@@ -26,7 +26,7 @@ public class Boss extends BaseEntity {
         super(x, y, width, height, "boss.png");
         this.health = 100; // Default health
         this.currentPhrase = 1;
-        this.pattern = new BossBulletPattern(this);
+        this.pattern = pattern;
         this.stateTime = 0;
     }
 
@@ -59,7 +59,7 @@ public class Boss extends BaseEntity {
 
     @Override
     public void render(SpriteBatch batch) {
-        image.bossDraw(boss.getWidth(), boss.getHeight(), boss.getX(), boss.getY(), batch);
+        this.getImage().bossDraw(this.getWidth(), this.getHeight(), this.getX(), this.getY(), batch);
     }
 
     @Override 
@@ -78,7 +78,6 @@ public class Boss extends BaseEntity {
 
     @Override
     public void onDestroy() {
-        isAlive = false;
         GameScreen.removeEntity(this);
         Main.getInstance().setScreen(new GameoverScreen());
         System.out.println("End stage.");
